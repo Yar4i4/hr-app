@@ -9,15 +9,6 @@ const API_ENDPOINT = window.location.hostname.includes('netlify.app')
 
 console.log('API_ENDPOINT:', API_ENDPOINT); // Добавляем console.log
 
-
-
-
-
-
-
-
-
-
 // Функция для отображения списка сотрудников
 function displayEmployees(employees) {
     employeeList.innerHTML = ''; // Очищаем список
@@ -31,7 +22,7 @@ function displayEmployees(employees) {
 // Функция для получения сотрудников с сервера
 async function getEmployees() {
     try {
-        const response = await fetch(API_ENDPOINT + '/employees'); //  Используем  API_ENDPOINT
+        const response = await fetch(API_ENDPOINT); // Исправлено: убрали /employees
         const employees = await response.json();
         displayEmployees(employees);
     } catch (error) {
@@ -43,7 +34,7 @@ async function getEmployees() {
 // Функция для поиска сотрудников
 async function searchEmployees(query) {
     try {
-        const response = await fetch(`${API_ENDPOINT}/employees/search?q=${query}`); // Используем API_ENDPOINT
+        const response = await fetch(`${API_ENDPOINT}/search?q=${query}`); //  Исправлено:  оставили  только  /search
         const employees = await response.json();
         displayEmployees(employees);
     } catch (error) {
