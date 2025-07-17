@@ -10,6 +10,9 @@ app.use(cors());
 // Middleware для обработки JSON
 app.use(express.json());
 
+// Middleware для отдачи статических файлов
+app.use(express.static('public')); 
+
 const dataFilePath = 'employees.json'; // Путь к файлу с данными
 
 // Функция для чтения данных из файла
