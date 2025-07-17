@@ -2,8 +2,10 @@
 const employeeList = document.getElementById('employeeList');
 const searchInput = document.getElementById('searchInput');
 
-// Определяем базовый URL для API Netlify Functions
-const API_ENDPOINT = '/.netlify/functions/employees';
+// Определяем базовый URL для API в зависимости от окружения
+const API_ENDPOINT = window.location.hostname.includes('netlify.app')
+    ? '/.netlify/functions/employees'
+    : 'http://localhost:3000';
 
 // Функция для отображения списка сотрудников
 function displayEmployees(employees) {
@@ -41,13 +43,13 @@ async function searchEmployees(query) {
 
 // Обработчик события для поля поиска
 searchInput.addEventListener('input', () => {
-    const query = searchInput.value.trim(); // Получаем значение из поля поиска и удаляем пробелы в начале и конце
-    if (query) {
-        searchEmployees(query); // Вызываем функцию поиска, если запрос не пустой
-    } else {
-        getEmployees(); // Если запрос пустой, отображаем всех сотрудников
-    }
-});
+        const query = searchInput.value.trim(); // Получаем значение из поля поиска и удаляем пробелы в начале и конце
+        if (query) {
+            searchEmployees(query); // Вызываем функцию поиска, если запрос не пустой
+        } else {
+            getEmployees(); // Если запрос пустой, отображаем всех сотрудников
+        }
+    });
 
-// Загружаем список сотрудников при загрузке страницы
-getEmployees();
+    // Загружаем список сотрудников при загрузке страницы
+    getEmployees();
