@@ -2,6 +2,9 @@
 const employeeList = document.getElementById('employeeList');
 const searchInput = document.getElementById('searchInput');
 
+// Определяем базовый URL для API Netlify Functions
+const API_ENDPOINT = '/.netlify/functions/employees';
+
 // Функция для отображения списка сотрудников
 function displayEmployees(employees) {
     employeeList.innerHTML = ''; // Очищаем список
@@ -15,7 +18,7 @@ function displayEmployees(employees) {
 // Функция для получения сотрудников с сервера
 async function getEmployees() {
     try {
-        const response = await fetch('http://localhost:3000/employees'); // Замените, если сервер будет на другом порту/хосте
+        const response = await fetch(API_ENDPOINT + '/employees'); //  Используем  API_ENDPOINT
         const employees = await response.json();
         displayEmployees(employees);
     } catch (error) {
@@ -27,7 +30,7 @@ async function getEmployees() {
 // Функция для поиска сотрудников
 async function searchEmployees(query) {
     try {
-        const response = await fetch(`http://localhost:3000/employees/search?q=${query}`);
+        const response = await fetch(`${API_ENDPOINT}/employees/search?q=${query}`); // Используем API_ENDPOINT
         const employees = await response.json();
         displayEmployees(employees);
     } catch (error) {
