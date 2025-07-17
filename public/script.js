@@ -1,9 +1,21 @@
 // public/script.js
-const API_ENDPOINT = '/.netlify/functions/employees'; //  Укажите  путь  к  функции Netlify
+const employeeList = document.getElementById('employeeList');
+const searchInput = document.getElementById('searchInput');
 
+// Функция для отображения списка сотрудников
+function displayEmployees(employees) {
+    employeeList.innerHTML = ''; // Очищаем список
+    employees.forEach(employee => {
+        const li = document.createElement('li');
+        li.textContent = `${employee.fullName} (${employee.position}, ${employee.department}, ${employee.contacts})`;
+        employeeList.appendChild(li);
+    });
+}
+
+// Функция для получения сотрудников с сервера
 async function getEmployees() {
     try {
-        const response = await fetch(API_ENDPOINT + '/employees');
+        const response = await fetch('http://localhost:3000/employees'); // Замените, если сервер будет на другом порту/хосте
         const employees = await response.json();
         displayEmployees(employees);
     } catch (error) {
@@ -12,9 +24,10 @@ async function getEmployees() {
     }
 }
 
+// Функция для поиска сотрудников
 async function searchEmployees(query) {
     try {
-        const response = await fetch(`${API_ENDPOINT}/employees/search?q=${query}`);
+        const response = await fetch(`http://localhost:3000/employees/search?q=${query}`);
         const employees = await response.json();
         displayEmployees(employees);
     } catch (error) {
@@ -23,3 +36,15 @@ async function searchEmployees(query) {
     }
 }
 
+// Обработчик события для поля поиска
+searchInput.addEventListener('input', () => {
+    const query = searchInput.value.trim(); // Получаем значение из поля поиска и удаляем пробелы в начале и конце
+    if (query) {
+        searchEmployees(query); // Вызываем функцию поиска, если запрос не пустой
+    } else {
+        getEmployees(); // Если запрос пустой, отображаем всех сотрудников
+    }
+});
+
+// Загружаем список сотрудников при загрузке страницы
+getEmployees();
