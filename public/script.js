@@ -7,6 +7,17 @@ const API_ENDPOINT = window.location.hostname.includes('netlify.app')
     ? '/.netlify/functions/employees'
     : 'http://localhost:3000';
 
+console.log('API_ENDPOINT:', API_ENDPOINT); // Добавляем console.log
+
+
+
+
+
+
+
+
+
+
 // Функция для отображения списка сотрудников
 function displayEmployees(employees) {
     employeeList.innerHTML = ''; // Очищаем список
