@@ -7,7 +7,7 @@ const cancelAddBtn = document.getElementById('cancelAddBtn');
 
 // Определяем базовый URL для API в зависимости от окружения
 const API_ENDPOINT = window.location.hostname.includes('netlify.app')
-    ? '' // Для Netlify используем относительный URL
+    ? '/' //  Для  Netlify  используем  корневой  путь
     : 'http://localhost:3000';
 
 console.log('API_ENDPOINT:', API_ENDPOINT);
