@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "fullName": "Иванов Иван Иванович",
+        "position": "Разработчик",
+        "department": "IT",
+        "contacts": "ivanov@example.com"
+    },
+    {
+        "id": 2,
+        "fullName": "Петрова Анна Сергеевна",
+        "position": "Менеджер",
+        "department": "Продажи",
+        "contacts": "petrova@example.com"
+    },
+    {
+        "id": 3,
+        "fullName": "Сидоров Сергей Петрович",
+        "position": "Дизайнер",
+        "department": "Маркетинг",
+        "contacts": "sidorov@example.com"
+    }
+]
