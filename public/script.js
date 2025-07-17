@@ -59,6 +59,7 @@ cancelAddBtn.addEventListener('click', (e) => {
 
 // Обработчик для кнопки "Сохранить"
 saveEmployeeBtn.addEventListener('click', async (e) => {
+    console.log('Сохранить нажата!'); //  <--  Добавляем  console.log
     e.preventDefault();
 
     // Получаем значения из полей формы
