@@ -26,5 +26,12 @@
     "position": "Дворецкий",
     "department": "Входная группа",
     "contacts": "+79967804711"
+  },
+  {
+    "id": 5,
+    "fullName": "Timoshchuk Yaroslav Nikolaevich",
+    "position": "Сам Зам",
+    "department": "070707",
+    "contacts": "+79967804711"
   }
 ]
