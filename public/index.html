@@ -1,36 +1,48 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Список сотрудников</title>
+    <title>HR System - Управление сотрудниками</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <h1>Список сотрудников</h1>
-    <button id="addEmployeeBtn">Добавить сотрудника</button>
+    <header>
+        <h1>Список сотрудников</h1>
+        <div class="controls">
+            <button id="addEmployeeBtn">Добавить сотрудника</button>
+            <input type="text" id="searchInput" placeholder="Поиск по ФИО">
+        </div>
+    </header>
 
-    <!-- Форма для добавления сотрудника (скрыта по умолчанию) -->
-    <div id="addEmployeeForm" style="display: none;">
-        <h2>Добавить сотрудника</h2>
-        <label for="fullName">ФИО:</label><br>
-        <input type="text" id="fullName" name="fullName"><br><br>
-        <label for="position">Должность:</label><br>
-        <input type="text" id="position" name="position"><br><br>
-        <label for="department">Подразделение:</label><br>
-        <input type="text" id="department" name="department"><br><br>
-        <label for="contacts">Контакты:</label><br>
-        <input type="text" id="contacts" name="contacts"><br><br>
-        <button id="saveEmployeeBtn">Сохранить</button>
-        <button id="cancelAddBtn">Отмена</button>
-    </div>
+    <!-- Форма для добавления сотрудника -->
+    <form id="addEmployeeForm" style="display: none;">
+        <h2>Добавить нового сотрудника</h2>
+        <div class="form-group">
+            <label for="fullName">ФИО:</label>
+            <input type="text" id="fullName" required>
+        </div>
+        <div class="form-group">
+            <label for="position">Должность:</label>
+            <input type="text" id="position">
+        </div>
+        <div class="form-group">
+            <label for="department">Подразделение:</label>
+            <input type="text" id="department">
+        </div>
+        <div class="form-group">
+            <label for="contacts">Контакты:</label>
+            <input type="text" id="contacts">
+        </div>
+        <div class="form-actions">
+            <button type="submit" id="saveEmployeeBtn">Сохранить</button>
+            <button type="button" id="cancelAddBtn">Отмена</button>
+        </div>
+    </form>
 
-    <input type="text" id="searchInput" placeholder="Поиск по ФИО">
-    <ul id="employeeList"></ul>
+    <!-- Список сотрудников -->
+    <ul id="employeeList" class="employee-list"></ul>
 
     <script src="script.js"></script>
 </body>
-
 </html>
