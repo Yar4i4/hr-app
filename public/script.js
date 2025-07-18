@@ -7,7 +7,7 @@ const cancelAddBtn = document.getElementById('cancelAddBtn');
 
 // Определяем базовый URL для API в зависимости от окружения
 const API_ENDPOINT = window.location.hostname.includes('netlify.app')
-    ? '/' //  Для  Netlify  используем  корневой  путь
+    ? '/.netlify/functions/employees' //  Для  Netlify  используем  корневой  путь
     : 'http://localhost:3000';
 
 console.log('API_ENDPOINT:', API_ENDPOINT);
@@ -25,7 +25,7 @@ function displayEmployees(employees) {
 // Функция для получения сотрудников с сервера
 async function getEmployees() {
     try {
-        const response = await fetch(`${API_ENDPOINT}`, {
+        const response = await fetch(`${API_ENDPOINT}`
         const employees = await response.json();
         displayEmployees(employees);
     } catch (error) {
