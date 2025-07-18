@@ -25,7 +25,7 @@ function displayEmployees(employees) {
 // Функция для получения сотрудников с сервера
 async function getEmployees() {
     try {
-        const response = await fetch(`${API_ENDPOINT}`)
+        const response = await fetch(`${API_ENDPOINT}`);
         const employees = await response.json();
         displayEmployees(employees);
     } catch (error) {
