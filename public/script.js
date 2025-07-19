@@ -3,13 +3,6 @@ const employeeList = document.getElementById('employeeList');
 const searchInput = document.getElementById('searchInput');
 const addEmployeeForm = document.getElementById('addEmployeeForm');
 
-
-
-
-
-
-
-
 // Функция для отображения списка сотрудников
 function displayEmployees(employees) {
     employeeList.innerHTML = '';
@@ -36,12 +29,9 @@ function displayEmployees(employees) {
 });
 }
 
-
-
-
 async function deleteEmployee(id) {
     try {
-        const response = await fetch(`/employees/${id}`, {
+        const response = await fetch(`/.netlify/functions/employees-delete/${id}`, { // 👈 Changed URL
             method: 'DELETE'
         });
         if (!response.ok) {
@@ -58,11 +48,10 @@ async function deleteEmployee(id) {
 }
 
 
-
 // Функция для получения сотрудников с сервера
 async function getEmployees() {
     try {
-        const response = await fetch('/employees');
+        const response = await fetch('/.netlify/functions/employees'); // 👈 Changed URL
         const employees = await response.json();
         displayEmployees(employees);
     } catch (error) {
@@ -74,7 +63,7 @@ async function getEmployees() {
 // Функция для поиска сотрудников
 async function searchEmployees(query) {
     try {
-        const response = await fetch(`/employees/search?q=${encodeURIComponent(query)}`);
+        const response = await fetch(`/.netlify/functions/employees-search?q=${encodeURIComponent(query)}`); // 👈 Changed URL
         const employees = await response.json();
         displayEmployees(employees);
     } catch (error) {
@@ -85,7 +74,7 @@ async function searchEmployees(query) {
 
 // Функция для добавления нового сотрудника
 async function addEmployee(employeeData) {
-    const response = await fetch('/employees', {
+    const response = await fetch('/.netlify/functions/employees-create', { // 👈 Changed URL
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
