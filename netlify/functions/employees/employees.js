@@ -1,21 +1,12 @@
-const fs = require('fs');
-const path = require('path');
-
 exports.handler = async (event, context) => {
-
-
-  const employeesFilePath = path.join(process.env.LAMBDA_TASK_ROOT, 'employees.json');
-
-
   try {
-    const data = await fs.promises.readFile(employeesFilePath, 'utf8');
-    const employees = JSON.parse(data);
+    const employees = require('./../../../employees.json');
     return {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-        "Access-Control-Allow-Credentials": true, // Set to true if you need the website to include cookies in the requests sent to the API (e.g. in case you use sessions)
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify(employees)
     };
@@ -25,8 +16,8 @@ exports.handler = async (event, context) => {
       statusCode: 500,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-        "Access-Control-Allow-Credentials": true, // Set to true if you need the website to include cookies in the requests sent to the API (e.g. in case you use sessions)
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({ message: 'Ошибка чтения файла' })
     };
