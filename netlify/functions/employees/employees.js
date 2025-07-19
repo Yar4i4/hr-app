@@ -1,6 +1,11 @@
-const employees = require('./../../../employees.json'); // 👈 Correct import
+const fs = require('fs');
+const path = require('path');
+
 exports.handler = async (event, context) => {
+  const employeesFilePath = path.join(__dirname, '../../../employees.json');
   try {
+    const data = await fs.promises.readFile(employeesFilePath, 'utf8');
+    const employees = JSON.parse(data);
     return {
       statusCode: 200,
       headers: {
