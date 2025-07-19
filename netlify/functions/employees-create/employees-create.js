@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 exports.handler = async (event, context) => {
-  const employeesFilePath = path.join(__dirname, '../../../employees.json');
+  const employeesFilePath = path.join(process.cwd(), 'employees.json');
 
   try {
     const newEmployee = JSON.parse(event.body);
