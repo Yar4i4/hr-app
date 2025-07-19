@@ -2,12 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 exports.handler = async (event, context) => {
-
-
-  const employeesFilePath = path.join(__dirname, '../../../employees.json'); // 👈 Corrected path
-
-
-  const id = parseInt(event.path.split('/').pop()); // 👈 Get ID from path
+  const employeesFilePath = path.join(__dirname, '../../employees.json');
+  const id = parseInt(event.path.split('/').pop()); // 👈  Get ID from path
 
   if (isNaN(id)) {
     return {
@@ -15,9 +11,9 @@ exports.handler = async (event, context) => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Credentials": true
       },
-      body: JSON.stringify({ message: 'Некорректный ID сотрудника' }),
+      body: JSON.stringify({ message: 'Некорректный ID сотрудника' })
     };
   }
 
@@ -30,8 +26,8 @@ exports.handler = async (event, context) => {
       statusCode: 204,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
+        "Access-Control-Allow-Credentials": true
+      }
     };
   } catch (error) {
     console.error(error);
@@ -40,9 +36,9 @@ exports.handler = async (event, context) => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Credentials": true
       },
-      body: JSON.stringify({ message: 'Ошибка при удалении сотрудника' }),
+      body: JSON.stringify({ message: 'Ошибка при удалении сотрудника' })
     };
   }
 };

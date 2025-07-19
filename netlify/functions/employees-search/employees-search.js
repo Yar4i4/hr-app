@@ -2,11 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 exports.handler = async (event, context) => {
-
-
-  const employeesFilePath = path.join(__dirname, '../../../employees.json'); // 👈 Corrected path
-
-
+  const employeesFilePath = path.join(__dirname, '../../employees.json'); //  Исправленный путь (относительно netlify/functions)
   const query = event.queryStringParameters.q;
 
   if (!query) {
@@ -15,7 +11,7 @@ exports.handler = async (event, context) => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Credentials": true
       },
       body: JSON.stringify({ message: 'Не указан параметр поиска q' })
     };
@@ -32,7 +28,7 @@ exports.handler = async (event, context) => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Credentials": true
       },
       body: JSON.stringify(results)
     };
@@ -43,7 +39,7 @@ exports.handler = async (event, context) => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Credentials": true
       },
       body: JSON.stringify({ message: 'Ошибка чтения файла' })
     };

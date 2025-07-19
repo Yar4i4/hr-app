@@ -2,9 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 exports.handler = async (event, context) => {
-
-
-  const employeesFilePath = path.join(__dirname, '../../../employees.json'); // 👈 Corrected path
+  const employeesFilePath = path.join(__dirname, '../../employees.json');
 
   try {
     const newEmployee = JSON.parse(event.body);
@@ -18,7 +16,7 @@ exports.handler = async (event, context) => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Credentials": true
       },
       body: JSON.stringify(newEmployee)
     };
@@ -29,7 +27,7 @@ exports.handler = async (event, context) => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Credentials": true
       },
       body: JSON.stringify({ message: 'Ошибка добавления сотрудника' })
     };
