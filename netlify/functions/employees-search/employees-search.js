@@ -2,7 +2,11 @@ const fs = require('fs');
 const path = require('path');
 
 exports.handler = async (event, context) => {
-  const employeesFilePath = process.cwd() + '/employees.json';
+
+
+  const employeesFilePath = path.join(process.env.LAMBDA_TASK_ROOT, 'employees.json');
+
+
   const query = event.queryStringParameters.q;
 
   if (!query) {
