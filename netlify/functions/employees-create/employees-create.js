@@ -4,7 +4,7 @@ const path = require('path');
 exports.handler = async (event, context) => {
 
 
-  const employeesFilePath = path.join(process.env.LAMBDA_TASK_ROOT, 'employees.json');
+  const employeesFilePath = path.join(__dirname, '../../../employees.json'); // 👈 Corrected path
 
   try {
     const newEmployee = JSON.parse(event.body);

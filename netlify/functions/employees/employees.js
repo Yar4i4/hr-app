@@ -1,6 +1,6 @@
+const employees = require('./../../../employees.json'); // 👈 Correct import
 exports.handler = async (event, context) => {
   try {
-    const employees = require('./../../../employees.json');
     return {
       statusCode: 200,
       headers: {
