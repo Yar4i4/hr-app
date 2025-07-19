@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 exports.handler = async (event, context) => {
-  const employeesFilePath = path.join(process.cwd(), 'employees.json');
+  const employeesFilePath = process.cwd() + '/employees.json';
 
   try {
     const data = await fs.promises.readFile(employeesFilePath, 'utf8');
