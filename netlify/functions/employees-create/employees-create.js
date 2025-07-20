@@ -1,22 +1,21 @@
-const fs = require('fs');
-const path = require('path');
+// C:\0191\hr-app\hr-app\netlify\functions\employees-create\employees-create.js
+const { connectToDatabase, Employee } = require('../../utils/db');
 
 exports.handler = async (event, context) => {
-  const employeesFilePath = path.join(__dirname, '../../employees.json');
+  context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const newEmployee = JSON.parse(event.body);
-    const data = await fs.promises.readFile(employeesFilePath, 'utf8');
-    const employees = JSON.parse(data);
-    newEmployee.id = Date.now();
-    employees.push(newEmployee);
-    await fs.promises.writeFile(employeesFilePath, JSON.stringify(employees, null, 2));
+    const employeeData = JSON.parse(event.body);
+    await connectToDatabase();
+    
+    const newEmployee = new Employee(employeeData);
+    await newEmployee.save();
+
     return {
       statusCode: 201,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true
+        "Access-Control-Allow-Origin": "*"
       },
       body: JSON.stringify(newEmployee)
     };
@@ -24,12 +23,7 @@ exports.handler = async (event, context) => {
     console.error(error);
     return {
       statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true
-      },
-      body: JSON.stringify({ message: 'Ошибка добавления сотрудника' })
+      body: JSON.stringify({ message: 'Ошибка добавления сотрудника в базу данных' })
     };
   }
 };

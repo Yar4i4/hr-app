@@ -8,22 +8,23 @@ function displayEmployees(employees) {
     employeeList.innerHTML = '';
     employees.forEach(employee => {
         const li = document.createElement('li');
+        // Используем employee.id, который мы создали в модели Mongoose
         li.innerHTML = `
             ${employee.fullName} (${employee.position}, ${employee.department}, ${employee.contacts.phone}, ${employee.contacts.email})
             <button class="deleteButton" data-id="${employee.id}">Удалить</button> 
-        `; // 👈  Добавлена кнопка
+        `;
         employeeList.appendChild(li);
     });
-        const deleteButtons = document.querySelectorAll('.deleteButton'); // 👈 Получаем все кнопки
+        const deleteButtons = document.querySelectorAll('.deleteButton');
   deleteButtons.forEach(button => {
-    button.addEventListener('click', async () => { // 👈 Добавили async
+    button.addEventListener('click', async () => {
         const employeeId = button.dataset.id;
         try {
-            await deleteEmployee(employeeId); // 👈  Вызываем функцию удаления
-            getEmployees(); // 👈 Обновляем список сотрудников
+            await deleteEmployee(employeeId); 
+            getEmployees(); 
         } catch (error) {
             console.error('Ошибка при удалении сотрудника:', error);
-            employeeList.textContent = `Ошибка при удалении сотрудника: ${error}`; // 👈  Показываем сообщение об ошибке
+            alert(`Ошибка при удалении сотрудника: ${error.message}`);
         }
     });
 });
@@ -31,16 +32,13 @@ function displayEmployees(employees) {
 
 async function deleteEmployee(id) {
     try {
-        const response = await fetch(`/.netlify/functions/employees-delete/${id}`, { // 👈 Changed URL
+        const response = await fetch(`/.netlify/functions/employees-delete/${id}`, {
             method: 'DELETE'
         });
-        if (!response.ok) {
-            throw new Error(`Ошибка HTTP: ${response.status}`);
+        if (!response.ok && response.status !== 204) {
+             const errorData = await response.json().catch(() => ({ message: 'Не удалось прочитать текст ошибки' }));
+            throw new Error(`Ошибка HTTP: ${response.status} - ${errorData.message}`);
         }
-        if (response.status !== 204) { // 👈  Проверяем статус ответа
-            return await response.json(); // 👈  Парсим JSON, только если это не 204
-        }
-        return; // 👈  Если 204, то просто возвращаем undefined
     } catch (error) {
         console.error('Ошибка при удалении сотрудника:', error);
         throw error;
@@ -51,19 +49,32 @@ async function deleteEmployee(id) {
 // Функция для получения сотрудников с сервера
 async function getEmployees() {
     try {
-        const response = await fetch('/.netlify/functions/employees'); // 👈 Changed URL
+        employeeList.textContent = 'Загрузка...'; // Индикатор загрузки
+        const response = await fetch('/.netlify/functions/employees');
+        if (!response.ok) {
+            throw new Error(`Ошибка HTTP: ${response.status}`);
+        }
         const employees = await response.json();
-        displayEmployees(employees);
+        if (employees.length === 0) {
+            employeeList.textContent = 'Сотрудники не найдены. Добавьте первого!';
+        } else {
+            displayEmployees(employees);
+        }
     } catch (error) {
         console.error('Ошибка получения сотрудников:', error);
         employeeList.textContent = 'Ошибка загрузки данных.';
     }
 }
 
+// ... (остальной код файла script.js остается без изменений)
+
 // Функция для поиска сотрудников
 async function searchEmployees(query) {
     try {
-        const response = await fetch(`/.netlify/functions/employees-search?q=${encodeURIComponent(query)}`); // 👈 Changed URL
+        const response = await fetch(`/.netlify/functions/employees-search?q=${encodeURIComponent(query)}`); 
+        if (!response.ok) {
+            throw new Error(`Ошибка HTTP: ${response.status}`);
+        }
         const employees = await response.json();
         displayEmployees(employees);
     } catch (error) {
@@ -74,7 +85,7 @@ async function searchEmployees(query) {
 
 // Функция для добавления нового сотрудника
 async function addEmployee(employeeData) {
-    const response = await fetch('/.netlify/functions/employees-create', { // 👈 Changed URL
+    const response = await fetch('/.netlify/functions/employees-create', { 
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -113,7 +124,7 @@ addEmployeeForm.addEventListener('submit', async (event) => {
         addEmployeeForm.reset();
     } catch (error) {
         console.error('Ошибка при добавлении сотрудника:', error);
-        employeeList.textContent = `Ошибка добавления сотрудника: ${error}`;
+        alert(`Ошибка добавления сотрудника: ${error.message}`);
     }
 });
 

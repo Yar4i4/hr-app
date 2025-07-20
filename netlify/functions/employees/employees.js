@@ -1,18 +1,18 @@
-const fs = require('fs');
-const path = require('path');
+// C:\0191\hr-app\hr-app\netlify\functions\employees\employees.js
+const { connectToDatabase, Employee } = require('../../utils/db');
 
 exports.handler = async (event, context) => {
-  const employeesFilePath = path.join(__dirname, '../../../employees.json');
-  
+  context.callbackWaitsForEmptyEventLoop = false;
+
   try {
-    const data = await fs.promises.readFile(employeesFilePath, 'utf8');
-    const employees = JSON.parse(data);
+    await connectToDatabase();
+    const employees = await Employee.find({});
+    
     return {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Origin": "*"
       },
       body: JSON.stringify(employees)
     };
@@ -20,12 +20,7 @@ exports.handler = async (event, context) => {
     console.error(error);
     return {
       statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({ message: 'Ошибка чтения файла' })
+      body: JSON.stringify({ message: 'Ошибка получения сотрудников из базы данных' })
     };
   }
 };

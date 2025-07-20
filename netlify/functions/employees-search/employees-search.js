@@ -1,34 +1,28 @@
-const fs = require('fs');
-const path = require('path');
+// C:\0191\hr-app\hr-app\netlify\functions\employees-search\employees-search.js
+const { connectToDatabase, Employee } = require('../../utils/db');
 
 exports.handler = async (event, context) => {
-  const employeesFilePath = path.join(__dirname, '../../employees.json'); //  Исправленный путь (относительно netlify/functions)
+  context.callbackWaitsForEmptyEventLoop = false;
   const query = event.queryStringParameters.q;
 
   if (!query) {
     return {
       statusCode: 400,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true
-      },
       body: JSON.stringify({ message: 'Не указан параметр поиска q' })
     };
   }
 
   try {
-    const data = await fs.promises.readFile(employeesFilePath, 'utf8');
-    const employees = JSON.parse(data);
-    const results = employees.filter(employee =>
-      employee.fullName.toLowerCase().includes(query.toLowerCase())
-    );
+    await connectToDatabase();
+    const results = await Employee.find({
+      fullName: { $regex: query, $options: 'i' }
+    });
+    
     return {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true
+        "Access-Control-Allow-Origin": "*"
       },
       body: JSON.stringify(results)
     };
@@ -36,12 +30,7 @@ exports.handler = async (event, context) => {
     console.error(error);
     return {
       statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true
-      },
-      body: JSON.stringify({ message: 'Ошибка чтения файла' })
+      body: JSON.stringify({ message: 'Ошибка поиска сотрудников в базе данных' })
     };
   }
 };

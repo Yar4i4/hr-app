@@ -1,44 +1,32 @@
-const fs = require('fs');
-const path = require('path');
+// C:\0191\hr-app\hr-app\netlify\functions\employees-delete\employees-delete.js
+const { connectToDatabase, Employee } = require('../../utils/db');
 
 exports.handler = async (event, context) => {
-  const employeesFilePath = path.join(__dirname, '../../employees.json');
-  const id = parseInt(event.path.split('/').pop()); // 👈  Get ID from path
+  context.callbackWaitsForEmptyEventLoop = false;
+  
+  const id = event.path.split('/').pop();
 
-  if (isNaN(id)) {
-    return {
-      statusCode: 400,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true
-      },
-      body: JSON.stringify({ message: 'Некорректный ID сотрудника' })
-    };
+  if (!id) {
+    return { statusCode: 400, body: JSON.stringify({ message: 'ID сотрудника не указан' }) };
   }
 
   try {
-    const data = await fs.promises.readFile(employeesFilePath, 'utf8');
-    let employees = JSON.parse(data);
-    employees = employees.filter(employee => employee.id !== id);
-    await fs.promises.writeFile(employeesFilePath, JSON.stringify(employees, null, 2));
+    await connectToDatabase();
+    const deletedEmployee = await Employee.findByIdAndDelete(id);
+
+    if (!deletedEmployee) {
+      return { statusCode: 404, body: JSON.stringify({ message: 'Сотрудник не найден' }) };
+    }
+
     return {
-      statusCode: 204,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true
-      }
+      statusCode: 204, // Успешное удаление
+      headers: { "Access-Control-Allow-Origin": "*" }
     };
   } catch (error) {
     console.error(error);
     return {
       statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true
-      },
-      body: JSON.stringify({ message: 'Ошибка при удалении сотрудника' })
+      body: JSON.stringify({ message: 'Ошибка при удалении сотрудника из базы данных' })
     };
   }
 };
