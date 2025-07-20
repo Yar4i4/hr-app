@@ -1,4 +1,17 @@
+[build]
+  # У нас нет шага сборки (как, например, в React), поэтому команда пустая
+  command = "# No build command"
+  
+  # Это самая важная строка. Указывает, что наш сайт - это папка "public"
+  publish = "public"
+  
+  # Явно указываем, где лежат наши бессерверные функции
+  functions = "netlify/functions"
+
+# Это правило перенаправления теперь будет работать правильно.
+# Оно также помогает в работе Single Page Applications (SPA),
+# перенаправляя все запросы, которые не являются файлами, на index.html
 [[redirects]]
-  from = "/"
-  to = "index.html"
+  from = "/*"
+  to = "/index.html"
   status = 200
